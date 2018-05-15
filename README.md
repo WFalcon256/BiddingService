@@ -1,5 +1,18 @@
 # BiddingService
 
+Q & A:
+1)  Exercise Difficulty: Easy, Moderate, Difficult, Very Difficult
+    * Diffuclt (see below)
+ 
+2) How did you feel about the exercise itself? (1 lowest, 10 highest—awesome way to assess coding ability)
+   * 5 - The exercise gave me a good opportunity to show off my coding and software development abilities in a fairly realistic scenario. The only downside is that this assignment required me to configure a new web service from scratch. I'm not as experienced with that type of work so I spent most of my time doing configuration work instead of actually coding.  This is why I rated the assignment as difficult.  The actual coding work was easy/moderate, but getting a new web server configured corrctly is something that I struggle with.
+   
+3) How do you feel about coding an exercise as a step in the interview process?  (1 lowest, 10 highest—awesome way to assess coding ability)
+   * 4 - I like the idea of having an assignment early in the interview process to assess coding ability. Unfortunately, this task also involves other skills that made it more challenging for me.  I think I would have been happier taking on this challenge later on in the interview process instead of right at the beginning.
+   
+4) What would you change in the exercise and/or process?
+   * Ideally, this task should involve adding code to some kind of preconfigured server environment that already has a database connection set up so the interviewee can focus solely on coding. I recognize that this involves more effort on your end, and it would give the interviewee less flexibility in terms of what approaches they could take to solving the problem, but I think it would let you focus on a candidate's coding abilities and software design skills.
+
 Setup Instructions
 
 Required files:::
