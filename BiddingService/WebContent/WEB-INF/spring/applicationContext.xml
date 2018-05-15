@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id: applicationContext.xml 5979 2017-05-11 14:41:05Z devgem $ -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:p="http://www.springframework.org/schema/p"
+            xmlns:context="http://www.springframework.org/schema/context"
+            xmlns:jee="http://www.springframework.org/schema/jee"
+            xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+            xmlns:mvc="http://www.springframework.org/schema/mvc"
+            xmlns:util="http://www.springframework.org/schema/util"
+            xmlns:tx="http://www.springframework.org/schema/tx"
+            xsi:schemaLocation="
+                http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans.xsd
+                http://www.springframework.org/schema/context
+                http://www.springframework.org/schema/context/spring-context.xsd
+                http://www.springframework.org/schema/jee
+                http://www.springframework.org/schema/jee/spring-jee.xsd
+                http://www.springframework.org/schema/data/jpa
+                http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+                http://www.springframework.org/schema/mvc
+                http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+                http://www.springframework.org/schema/util
+                http://www.springframework.org/schema/util/spring-util-3.0.xsd
+                http://www.springframework.org/schema/tx 
+                http://www.springframework.org/schema/tx/spring-tx.xsd">
+                
+	<mvc:annotation-driven />
+
+	<context:annotation-config/>
+    <context:component-scan base-package="testproject.biddingservice"/>
+    
+	<bean id="jacksonConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+	
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<util:list id="beanList">
+				<ref bean="jacksonConverter" />
+			</util:list>
+		</property>
+	</bean>
+	
+	<!-- JPA -->
+    <jee:jndi-lookup id="dataSourceBiddingDb" jndi-name="jdbc/biddingdb"/>
+    
+        <!-- persistence unit manager -->             
+    <bean id="persistenceUnitManagerBiddingdb" 
+          class="org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager">
+        <property name="persistenceXmlLocations" value="/META-INF/persistence.xml"/>
+        <property name="defaultDataSource" ref="dataSourceBiddingDb"/>
+    </bean>
+    
+    <!-- entity manager factory with PU settings -->
+    <bean id="entityManagerFactoryBiddingdb" 
+          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" >
+        <property name="persistenceUnitManager" ref="persistenceUnitManagerBiddingdb"/>
+        <property name="persistenceUnitName" value="biddingdbPU"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="database" value="MYSQL"/>
+                <property name="databasePlatform" value="org.hibernate.dialect.MySQL5Dialect"/>
+                                
+<!-- DO NOT release to PROD with THIS TRUE...  -->                       
+                <property name="showSql" value="false"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- transaction manager   -->          
+    <bean id="transactionManagerBiddingdb" 
+          class="org.springframework.orm.jpa.JpaTransactionManager">   
+        <property name="entityManagerFactory" ref="entityManagerFactoryBiddingdb" />   
+    </bean> 
+    
+    <!-- spring repositories location (@Repository annotated) -->
+    <jpa:repositories base-package="testproject.biddingservice.jpa"
+            entity-manager-factory-ref="entityManagerFactoryBiddingdb"
+            transaction-manager-ref="transactionManagerBiddingdb"/>
+    
+</beans>
